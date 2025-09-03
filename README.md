@@ -33,11 +33,23 @@ A powerful AI-powered document search application that allows you to upload PDF 
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd ai-doc-search
+   git clone https://github.com/Sayeem3051/Chatbot-RAG-.git
+   cd Chatbot-RAG-
    ```
 
 2. **Set up environment variables**
+   
+   **Option A: Using .env file (Recommended)**
+   ```bash
+   # Copy the example environment file
+   cp env.example .env
+   
+   # Edit .env and add your Mistral API key
+   # Get your API key from: https://console.mistral.ai/
+   MISTRAL_API_KEY=your-actual-api-key-here
+   ```
+   
+   **Option B: Using environment variable**
    ```bash
    export MISTRAL_API_KEY="your-mistral-api-key-here"
    ```
@@ -73,6 +85,9 @@ A powerful AI-powered document search application that allows you to upload PDF 
 
 4. **Set environment variable**
    ```bash
+   # Create .env file or set environment variable
+   echo "MISTRAL_API_KEY=your-mistral-api-key-here" > .env
+   # OR
    export MISTRAL_API_KEY="your-mistral-api-key-here"
    ```
 
@@ -140,6 +155,14 @@ Ask a question about the uploaded document.
 ### Environment Variables
 
 - `MISTRAL_API_KEY`: Your Mistral AI API key (required)
+
+### Security Notes
+
+⚠️ **Important Security Information:**
+- Never commit your actual API key to version control
+- The `.env` file is already included in `.gitignore` to prevent accidental commits
+- Use the `env.example` file as a template for your environment variables
+- Keep your API keys secure and rotate them regularly
 
 ### Model Configuration
 

@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - MISTRAL_API_KEY=Qm4kD3Ge9phVSsTjxu069woCSyVAV0Pf
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
   frontend:
     build: ./frontend
     ports:
