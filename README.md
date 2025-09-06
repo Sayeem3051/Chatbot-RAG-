@@ -26,10 +26,14 @@ A powerful AI-powered document search application that allows you to upload PDF 
 
 ## Prerequisites
 
-- Docker and Docker Compose
-- Mistral API key (get one from [Mistral AI](https://console.mistral.ai/))
+- **Node.js** (v14 or higher) and npm
+- **Python** (3.9 or higher)
+- **Mistral API key** (get one from [Mistral AI](https://console.mistral.ai/))
+- **Docker and Docker Compose** (optional, for containerized deployment)
 
 ## Quick Start
+
+### 🚀 **Easiest Method: Using Batch Scripts (Windows)**
 
 1. **Clone the repository**
    ```bash
@@ -37,29 +41,45 @@ A powerful AI-powered document search application that allows you to upload PDF 
    cd Chatbot-RAG-
    ```
 
-2. **Set up environment variables**
+2. **Get your Mistral API key**
+   - Sign up at [Mistral AI](https://console.mistral.ai/)
+   - Copy your API key
+
+3. **Edit the batch script**
+   - Open `start_backend.bat` in a text editor
+   - Replace `your-mistral-api-key-here` with your actual API key
+
+4. **Start the application**
+   ```cmd
+   # Option A: Start both frontend and backend automatically
+   start_all.bat
    
-   **Option A: Using .env file (Recommended)**
+   # Option B: Start them separately
+   start_backend.bat
+   # Then in another terminal: cd frontend && npm run dev
+   ```
+
+5. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+
+### 🐳 **Docker Method**
+
+1. **Set up environment variables**
    ```bash
    # Copy the example environment file
    cp env.example .env
    
    # Edit .env and add your Mistral API key
-   # Get your API key from: https://console.mistral.ai/
    MISTRAL_API_KEY=your-actual-api-key-here
    ```
-   
-   **Option B: Using environment variable**
-   ```bash
-   export MISTRAL_API_KEY="your-mistral-api-key-here"
-   ```
 
-3. **Run with Docker Compose**
+2. **Run with Docker Compose**
    ```bash
    docker-compose up --build
    ```
 
-4. **Access the application**
+3. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
 
@@ -75,7 +95,12 @@ A powerful AI-powered document search application that allows you to upload PDF 
 2. **Create virtual environment**
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   
+   # Activate virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
    ```
 
 3. **Install dependencies**
@@ -85,14 +110,19 @@ A powerful AI-powered document search application that allows you to upload PDF 
 
 4. **Set environment variable**
    ```bash
-   # Create .env file or set environment variable
-   echo "MISTRAL_API_KEY=your-mistral-api-key-here" > .env
-   # OR
+   # Windows PowerShell:
+   $env:MISTRAL_API_KEY="your-mistral-api-key-here"
+   
+   # Windows Command Prompt:
+   set MISTRAL_API_KEY=your-mistral-api-key-here
+   
+   # macOS/Linux:
    export MISTRAL_API_KEY="your-mistral-api-key-here"
    ```
 
-5. **Run the server**
+5. **Run the server (IMPORTANT: Must be run from backend directory)**
    ```bash
+   # Make sure you're in the backend directory!
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
 
@@ -112,6 +142,11 @@ A powerful AI-powered document search application that allows you to upload PDF 
    ```bash
    npm run dev
    ```
+
+### ⚠️ **Important Notes:**
+- **Backend**: Always run `uvicorn` from the `backend` directory, not the project root
+- **Frontend**: Always run `npm run dev` from the `frontend` directory, not the project root
+- **API Key**: Make sure your Mistral API key is set before starting the backend
 
 ## Usage
 
@@ -172,20 +207,109 @@ The application uses the following models by default:
 
 You can modify these in `backend/main.py` if needed.
 
+## Batch Scripts (Windows)
+
+This project includes convenient batch scripts to simplify startup:
+
+### `start_backend.bat`
+- Automatically navigates to the backend directory
+- Activates the Python virtual environment
+- Sets the Mistral API key
+- Starts the FastAPI server
+
+### `start_all.bat`
+- Starts both backend and frontend servers automatically
+- Opens two terminal windows (one for each server)
+- Handles all directory navigation and environment setup
+
+**To customize the API key:**
+1. Open `start_backend.bat` in a text editor
+2. Replace `your-mistral-api-key-here` with your actual Mistral API key
+3. Save the file
+
+**Usage:**
+```cmd
+# Start both servers
+start_all.bat
+
+# Or start backend only
+start_backend.bat
+```
+
 ## Troubleshooting
 
 ### Common Issues
 
-1. **"No document uploaded yet" error**
+1. **"Could not import module 'main'" error**
+   - **Cause**: Running uvicorn from the wrong directory
+   - **Solution**: Always run `uvicorn main:app` from the `backend` directory, not the project root
+   - **Check**: Your terminal should show `C:\path\to\project\backend>` not `C:\path\to\project>`
+
+2. **"Missing script: 'dev'" error**
+   - **Cause**: Running `npm run dev` from the wrong directory
+   - **Solution**: Always run `npm run dev` from the `frontend` directory, not the project root
+   - **Check**: Your terminal should show `C:\path\to\project\frontend>` not `C:\path\to\project>`
+
+3. **"localhost refused to connect" (ERR_CONNECTION_REFUSED)**
+   - **Backend not running**: Check if backend is running on http://localhost:8000
+   - **Frontend not running**: Check if frontend is running on http://localhost:3000
+   - **Solution**: Use `start_all.bat` to start both servers automatically
+
+4. **"No document uploaded yet" error**
    - Make sure to upload a PDF file before asking questions
 
-2. **API key issues**
+5. **API key issues**
    - Verify your Mistral API key is correctly set
    - Check that the API key has sufficient credits
+   - Make sure the API key is set before starting the backend
 
-3. **CORS errors**
+6. **CORS errors**
    - The backend is configured to allow all origins for development
    - For production, update the CORS settings in `backend/main.py`
+
+### Quick Fixes
+
+**If you see any import errors:**
+```bash
+# Navigate to the correct directory first!
+cd backend
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+**If frontend won't start:**
+```bash
+# Navigate to the correct directory first!
+cd frontend
+npm run dev
+```
+
+**Easy solution - Use the batch scripts:**
+```cmd
+# This handles everything automatically
+start_all.bat
+```
+
+### Success Indicators
+
+**Backend is working correctly when you see:**
+```
+INFO:     Started server process [XXXX]
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:XXXXX - "POST /upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:XXXXX - "POST /chat HTTP/1.1" 200 OK
+```
+
+**Frontend is working correctly when you see:**
+```
+VITE v4.5.14  ready in XXX ms
+➜  Local:   http://localhost:3000/
+➜  Network: http://192.168.1.X:3000/
+```
+
+**Normal log messages (not errors):**
+- `"GET / HTTP/1.1" 404 Not Found` - This is normal, the root path doesn't exist
+- `LangChainDeprecationWarning` - This is just a warning, the app still works
 
 ### Performance Tips
 
